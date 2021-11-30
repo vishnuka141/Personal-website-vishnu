@@ -480,7 +480,7 @@
 
        
 
-             <!-- Alerts -->
+             <!-- Alerts -
     <div id="successAlert" class="alert alert-success alert-dismissible fade show text-center" role="alert">
       <strong>Congrats!</strong> Your request has been successfully submitted ;)
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -490,38 +490,35 @@
       <strong>Whoops!</strong> Something is wrong :/
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
-
+-->
   <!-- Form -->
  <div class="container my-4">
-      <form id="submit-form" autocomplete="off" class="php-email-form" >
-          <div class="mb-4">
-              <label for="username" class="form-label">Your Name</label>
-              <input name="name" type="text" class="form-control" id="username" placeholder="Enter your name">
-              <small id="usernamevalid" class="form-text text-danger invalid-feedback">Name must be fill.</small>
+ 
+        <form class="row g-3 mx-auto php-email-form" id="submit-form" style="max-width: 600px;">
+
+          <div class="col-12 ">
+            <input type="text" placeholder="Name" name="name" class="form-control border-0 shadow-sm" id="name" maxlength="24" >
+            <p style="color: red;" id="error1"></p>
           </div>
-
-          <div class="mb-4">
-              <label for="email" class="form-label">Email address</label>
-              <input name="email" type="text" class="form-control" id="email" aria-describedby="emailHelp" autocomplete="off" placeholder="abc@gmail.com">
-              <div id="emailHelp" class="form-text"></div>
-              <small id="emailvalid" class="form-text text-danger invalid-feedback">Email must be valid!</small>
+          <div class="col-12 mx-auto">
+            <input type="tel" placeholder="Phone" name="phone" oninput="this.value=this.value.replace(/[^\d]/,'')" class="form-control border-0 shadow-sm" id="phone">
+            <p style="color: red;" id="error3"></p>
           </div>
-
-          <div class="mb-4 phone">
-              <label for="phone" class="form-label">Phone</label>
-              <input name="phone" type="text" class="form-control" id="phone" autocomplete="off" placeholder="+91">
-              <small id="phonevalid" class="form-text text-danger invalid-feedback">Phone must be 10 digits long.</small>
-          </div>
-
-          <div class="mb-4">
-              <label for="address" class="form-label">Message</label>
-              <textarea name="message" id="address" class="form-control" autocomplete="off" placeholder="Message"></textarea>
-          </div>
-
-        
-
+            <div class="col-12 mx-auto" >
+            <input type="email" placeholder="Email" name="email" oninput="this.value = this.value.replace(/\s/g,'');" class="form-control border-0 shadow-sm" id="email">
+            <p style="color: red;" id="error2"></p>
+            </div>
+            
+            <div class="col-md-12 mb-3">
+            <textarea class="form-control border-0 shadow-sm" id="exampleFormControlTextarea1" placeholder="message" name="message" rows="3" style="max-height: 50; min-height: 50;"></textarea>
+            <p style="color: red;" id="error4"></p>
+            </div>
+        <!---- <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary">submit</button>
+          </div>-->
+          
        <!---- <button id="submit" type="submit" class="myBtn btn">Submit</button> -->
-          <input class="myBtn btn" style="font-weight: bold;color: white; border-radius: 6px;background: #149ddd;;"  type="submit" value="Submit" onClick="return document.getElementById('address').value !=''"/>
+          <input class="btn" style="font-weight: bold;color: white; border-radius: 6px;background: #149ddd;;"  type="submit" value="Submit" onClick="return document.getElementById('exampleFormControlTextarea1').value !=''"/>
       </form>
   </div>
           
@@ -565,61 +562,128 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
- <script>   
- const username = document.getElementById("username");
-const email = document.getElementById("email");
-const phone = document.getElementById("phone");
-let validUsername = false;
-let validEmail = false;
-let validPhone = false;
-const successAlert = document.getElementById("successAlert");
-const failAlert = document.getElementById("failAlert");
 
-successAlert.style.display = "none";
-failAlert.style.display = "none";
 
-username.addEventListener("blur", () => {
-    let regex = /^[a-zA-Z]([0-9a-zA-Z]){1,10}$/;
-    let str = username.value;
-    if (regex.test(str)) {
-        username.classList.remove("is-invalid");
-        validUsername = true;
-    } else {
-        username.classList.add("is-invalid");
-        validUsername = false;
+<script>
+let checkname = false;
+   let checkemail = false;
+   let checkphone = false;
+   let checkmessage = false;
+
+
+
+
+
+ function checkname1() {
+   let namevalue = $("#name").val()
+   let nameRegex = /^[-a-zA-Z-()]+(\s+[-a-zA-Z-()]+)*$/;
+   if (namevalue == "") {
+     $("#error1").html("Name is mandatory!")
+   }
+   else if(namevalue.length<3 || namevalue.length>20 ){
+     checkname = true
+     $("#error1").html("please enter valid name")
+   }
+   else if (namevalue.match(nameRegex)) {
+     checkname = true
+     $("#error1").html("")
+   }
+ }
+
+ function checkemail1() {
+   let emailvalue = $("#email").val()
+   let emailRegex = /^[a-zA-Z0-9.!#$%&’+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/
+   if (emailvalue == "") {
+     $("#error2").html("Email is mandatory!")
+   }
+   else if (emailvalue.match(emailRegex)) {
+     checkemail = true
+     $("#error2").html("")
+   }
+   else {
+     $("#error2").html("Invalid email!")
+     checkemail = false
+   }
+ }
+ $('#email').keypress(function( email ) {
+   if(email.which === 32) 
+   return false;
+   });
+
+ 
+
+ function checkphone1() {
+   let phonevalue = $("#phone").val()
+   let phoneRegex = /[0-9]{10}/;
+   let messageRegex = /^[-a-zA-Z-()]+(\s+[-a-zA-Z-()]+)*$/;
+   if (phonevalue == "") {
+     $("#error3").html("Mobile number is mandatory!")
+   }
+   else if (phonevalue.match(phoneRegex)) {
+     checkphone = true
+     $("#error3").html("")
+   }
+   else if(phonevalue.match(messageRegex)){
+     checkphone=false
+     $("#error3").html("please enter a valid mobile number")
+   }
+   else if(phonevalue.length==10){
+     checkphone = true
+     $("#error3").html("")
+   }
+   else{
+     $("#error3").html("please enter 10 digit number")
+     checkphone=false
+   }
+ }
+ 
+
+
+ function checkmessage1() {
+   let messagevalue = $("#exampleFormControlTextarea1").val()
+   let messageRegex = /^[-a-zA-Z-()]+(\s+[-a-zA-Z-()]+)*$/;
+   if (messagevalue == "") {
+     $("#error4").html("Enter Something!")
+   }
+   else if (messagevalue.match(messageRegex)) {
+     checkmessage = true
+     $("#error4").html("")
+   }
+   else {
+     $("#error4").html("")
+     checkmessage = false
+   }
+
+ }
+
+ $('#name').keypress(function(event){
+  if (
+      !event.key.match(/^[A-Za-z ]+$/) ||
+      (this.value.slice(-1) == ' ' && event.key == ' ')||
+      (this.value == '' && event.key == ' ')
+    ) {
+      event.preventDefault()
     }
-});
-
-email.addEventListener("blur", () => {
-    let emailHelp = document.getElementById("emailHelp");
-    let regex = /^([_\-\.a-zA-Z0-9]+)@([_\-\.a-zA-Z0-9]+)\.([a-zA-Z]){2,7}$/;
-    let str = email.value;
-    if (regex.test(str)) {
-        emailHelp.innerHTML = `</div>`;
-        email.classList.remove("is-invalid");
-        validEmail = true;
-    } else {
-        emailHelp.innerHTML = ``;
-        email.classList.add("is-invalid");
-        validEmail = false;
-    }
-});
-
-phone.addEventListener("blur", () => {
-    let regex = /^([0-9]){10}$/;
-    let str = phone.value;
-    if (regex.test(str)) {
-        phone.classList.remove("is-invalid");
-        validPhone = true;
-    } else {
-        phone.classList.add("is-invalid");
-        validPhone = false;
-    }
-});
-let submit = document.getElementById("submit");
+   })
 
 
+ $(document).ready(function () {
+    $("#name").keyup(function () {
+     checkname1()
+    })
 
+    $("#email").keyup(function () {
+     checkemail1()
+    })
+
+    $("#phone").keyup(function () {
+     checkphone1()
+    })
+    $("#exampleFormControlTextarea1").keyup(function () {
+     checkmessage1()
+    })
+
+   });
 
 
 //submit form/
