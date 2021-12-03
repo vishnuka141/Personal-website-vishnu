@@ -71,7 +71,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: all 0.5s;
   padding: 0 15px;
   background: #040b14;
-  overflow-y: auto;
+  
 }
 #header .profile img {
   margin: 15px auto;
@@ -115,12 +115,15 @@ h1, h2, h3, h4, h5, h6 {
 #main {
   margin-left: 300px;
 }
-
+@media (max-width: 592px){
+  #header{
+    overflow-y: auto;
+  }
+}
 @media (max-width: 1199px) {
   #header {
     left: -300px;
   }
-
   #main {
     margin-left: 0;
   }
